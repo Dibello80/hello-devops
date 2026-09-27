@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 jobs:
   build:
@@ -42,3 +43,22 @@ jobs:
       - name: Push Docker image
         if: github.event_name == 'push'
         run: docker push ghcr.io/dibello80/hello-devops:latest
+
+      - name: Configure AWS credentials
+        if: github.event_name == 'push'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-west-1
+
+      - name: Deploy to EC2 with SSM
+        if: github.event_name == 'push'
+        run: |
+          aws ssm send-command \
+            --instance-ids "i-0c77da5912a6b7f75" \
+            --document-name "AWS-RunShellScript" \
+            --parameters 'commands=[
+              "sudo docker pull ghcr.io/dibello80/hello-devops:latest",
+              "sudo docker rm -f hello-devops || true",
+              "sudo docker run -d --restart unless-stopped --name hello-devops -p 80:8080 ghcr.io/dibello80/hello-devops:latest"
+            ]'
