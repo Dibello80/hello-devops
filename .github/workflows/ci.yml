@@ -44,6 +44,12 @@ jobs:
         if: github.event_name == 'push'
         run: docker push ghcr.io/dibello80/hello-devops:latest
 
+      - name: Inspect GitHub OIDC claims
+        if: github.event_name == 'push'
+        uses: github/actions-oidc-debugger@main
+        with:
+          audience: sts.amazonaws.com
+
       - name: Configure AWS credentials
         if: github.event_name == 'push'
         uses: aws-actions/configure-aws-credentials@v5
