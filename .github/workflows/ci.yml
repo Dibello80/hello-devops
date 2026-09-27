@@ -1,10 +1,14 @@
-name: Java Docker CI
+name: Java Docker CI/CD
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build:
@@ -24,5 +28,17 @@ jobs:
       - name: Build and test application
         run: ./mvnw clean package
 
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker image
-        run: docker build -t hello-devops .
+        run: docker build -t ghcr.io/dibello80/hello-devops:latest .
+
+      - name: Push Docker image
+        if: github.event_name == 'push'
+        run: docker push ghcr.io/dibello80/hello-devops:latest
