@@ -5,3 +5,7 @@ data "aws_vpc" "default" {
 data "aws_subnet" "existing" {
   id = "subnet-0c1b18b2f1907e825"
 }
+
+data "aws_security_group" "existing" {
+  id = "sg-010551cbd7c338a92"
+}

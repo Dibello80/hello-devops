@@ -34,7 +34,7 @@ resource "aws_instance" "hello_devops" {
   user_data                   = null
   user_data_replace_on_change = null
   volume_tags                 = null
-  vpc_security_group_ids      = ["sg-010551cbd7c338a92"]
+  vpc_security_group_ids      = [data.aws_security_group.existing.id]
   capacity_reservation_specification {
     capacity_reservation_preference = "open"
   }
