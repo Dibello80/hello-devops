@@ -1,4 +1,4 @@
-name: Terraform Validation
+name: Terraform Validation and Plan
 
 on:
   push:
@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   validate:
@@ -34,8 +35,23 @@ jobs:
       - name: Check Terraform formatting
         run: terraform fmt -check
 
-      - name: Initialize Terraform without backend
+      - name: Initialize without backend
         run: terraform init -backend=false
 
-      - name: Validate Terraform configuration
+      - name: Validate Terraform
         run: terraform validate
+
+      - name: Configure AWS credentials with OIDC
+        if: github.event_name == 'push'
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::200359303675:role/GitHubTerraformPlanRole
+          aws-region: us-west-1
+
+      - name: Initialize S3 backend
+        if: github.event_name == 'push'
+        run: terraform init -reconfigure -input=false
+
+      - name: Run Terraform Plan
+        if: github.event_name == 'push'
+        run: terraform plan -input=false -no-color
