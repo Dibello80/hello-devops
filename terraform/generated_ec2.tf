@@ -23,7 +23,7 @@ resource "aws_instance" "hello_devops" {
   secondary_private_ips                = []
   security_groups                      = ["launch-wizard-1"]
   source_dest_check                    = true
-  subnet_id                            = "subnet-0c1b18b2f1907e825"
+  subnet_id                            = data.aws_subnet.existing.id
   tags = {
     Name = "hello-devops-server"
   }

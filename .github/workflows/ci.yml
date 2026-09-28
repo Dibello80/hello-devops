@@ -1,10 +1,28 @@
+
 name: Java Docker CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+      - 'Dockerfile'
+      - 'mvnw'
+      - 'mvnw.cmd'
+      - '.mvn/**'
+      - '.github/workflows/ci.yml'
+
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+      - 'Dockerfile'
+      - 'mvnw'
+      - 'mvnw.cmd'
+      - '.mvn/**'
+      - '.github/workflows/ci.yml'
 
 permissions:
   contents: read
