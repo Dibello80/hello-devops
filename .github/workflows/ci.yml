@@ -1,3 +1,4 @@
+
 name: Java Docker CI/CD
 
 on:
@@ -93,3 +94,23 @@ jobs:
             --command-id "$COMMAND_ID" \
             --instance-id "i-0c77da5912a6b7f75" \
             --query '{Status:Status,Output:StandardOutputContent}'
+
+      - name: Verify application health
+        if: github.event_name == 'push'
+        run: |
+          echo "Checking application health..."
+
+          for attempt in {1..12}; do
+            if curl --fail --silent --show-error --max-time 5 \
+              http://13.57.231.114/; then
+              echo ""
+              echo "Application is healthy!"
+              exit 0
+            fi
+
+            echo "Attempt $attempt failed. Retrying in 5 seconds..."
+            sleep 5
+          done
+
+          echo "Application health check failed."
+          exit 1
