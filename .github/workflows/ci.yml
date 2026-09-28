@@ -78,7 +78,7 @@ jobs:
             --parameters 'commands=[
               "sudo docker pull ghcr.io/dibello80/hello-devops:latest",
               "sudo docker rm -f hello-devops || true",
-              "sudo docker run -d --restart unless-stopped --name hello-devops -p 80:8080 --log-driver=awslogs --log-opt awslogs-region=us-west-1 --log-opt awslogs-group=/hello-devops/application --log-opt awslogs-stream=hello-devops ghcr.io/dibello80/hello-devops:latest",
+              "sudo docker run -d --restart unless-stopped --name hello-devops -p 127.0.0.1:8080:8080 --log-driver=awslogs --log-opt awslogs-region=us-west-1 --log-opt awslogs-group=/hello-devops/application --log-opt awslogs-stream=hello-devops ghcr.io/dibello80/hello-devops:latest",
               "sudo docker inspect --format={{.State.Running}} hello-devops | grep -x true"
             ]' \
             --query 'Command.CommandId' \
@@ -102,7 +102,7 @@ jobs:
 
           for attempt in {1..12}; do
             if curl --fail --silent --show-error --max-time 5 \
-              http://184.169.225.235/; then
+              https://devops.dibellointeractive.com/; then
               echo ""
               echo "Application is healthy!"
               exit 0
