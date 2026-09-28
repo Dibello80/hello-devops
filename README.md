@@ -1,5 +1,5 @@
 ﻿
-# Hello DevOps â€” AWS CI/CD Portfolio Project
+# Hello DevOps AWS CI/CD Portfolio Project
 
 A hands-on DevOps project demonstrating automated Java application delivery, Infrastructure as Code, monitoring, and secure HTTPS hosting on AWS.
 
