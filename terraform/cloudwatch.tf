@@ -1,3 +1,4 @@
+
 resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   alarm_name          = "hello-devops-high-cpu"
   alarm_description   = "Alert when EC2 CPU exceeds 70 percent for 10 minutes"
@@ -14,7 +15,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
     InstanceId = aws_instance.hello_devops.id
   }
 
-  alarm_actions             = []
+  alarm_actions             = [aws_sns_topic.devops_alerts.arn]
   ok_actions                = []
   insufficient_data_actions = []
 
