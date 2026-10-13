@@ -213,6 +213,47 @@ Remaining validation includes deliberate rollback failure testing and final oper
 Extended the existing Spring Boot DevOps application with a
 local Kubernetes environment using Minikube and Docker.
 
+
+### Rolling Deployments and Recovery Lab
+
+Practiced Kubernetes application lifecycle management
+using a local Minikube cluster.
+
+#### Exercises Completed
+
+1. Simulated a failed deployment using an invalid image tag.
+2. Diagnosed the ImagePullBackOff condition.
+3. Restored the previous Deployment revision using rollout undo.
+4. Performed a successful rolling restart.
+5. Deployed locally tagged Docker images (v2 and v3).
+6. Built v3 with a visible Spring Boot HTML change.
+7. Verified the new application version through port forwarding.
+8. Rolled back to v2 and confirmed the v3 content was removed.
+9. Restored the original Deployment configuration from Git.
+
+#### Kubernetes Commands Practiced
+
+    kubectl get deployments
+    kubectl get pods
+    kubectl describe pod <pod-name>
+    kubectl rollout history deployment/hello-devops
+    kubectl rollout restart deployment/hello-devops
+    kubectl rollout status deployment/hello-devops
+    kubectl rollout undo deployment/hello-devops
+    kubectl set image deployment/hello-devops hello-devops=hello-devops:v3
+
+#### Key Lessons
+
+- Kubernetes uses Deployment revisions to track Pod-template changes.
+- Readiness probes help protect availability during rolling updates.
+- Failed deployments do not automatically trigger rollbacks.
+- Versioned container images make releases easier to identify.
+- Declarative manifests help restore configuration consistency.
+
+Environment: Local Minikube lab.
+
+Production hosting remains on AWS EC2 with Docker.
+
 ### Architecture
 
 - Kubernetes Deployment managing two Spring Boot replicas
