@@ -204,3 +204,68 @@ Check the CloudWatch alarm action, SNS subscription confirmation, and email deli
 The application is deployed and accessible over HTTPS, and the CI/CD, Terraform, and monitoring workflows have been verified.
 
 Remaining validation includes deliberate rollback failure testing and final operational checks.
+
+
+---
+
+## Kubernetes Container Orchestration
+
+Extended the existing Spring Boot DevOps application with a
+local Kubernetes environment using Minikube and Docker.
+
+### Architecture
+
+- Kubernetes Deployment managing two Spring Boot replicas
+- ClusterIP Service for internal networking
+- HTTP readiness and liveness probes
+- CPU and memory requests and limits
+- Existing container image hosted in GitHub Container Registry
+
+### Hands-On Validation
+
+Successfully completed the following exercises:
+
+1. Deployed two healthy Spring Boot Pods.
+2. Verified Pod readiness and application startup.
+3. Deleted a running Pod to test automatic recovery.
+4. Observed Kubernetes automatically create a replacement.
+5. Verified the replacement passed its readiness checks.
+6. Tested horizontal scaling from two to three replicas.
+
+### Run Locally
+
+Start the Kubernetes cluster:
+
+    minikube start --driver=docker
+
+Load the container image:
+
+    docker pull ghcr.io/dibello80/hello-devops:latest
+    minikube image load ghcr.io/dibello80/hello-devops:latest
+
+Deploy the application:
+
+    kubectl apply -f kubernetes/
+
+Check the deployment:
+
+    kubectl get deployments
+    kubectl get pods
+    kubectl get services
+
+Access the application:
+
+    kubectl port-forward service/hello-devops 8080:8080
+
+Visit http://localhost:8080.
+
+### Deployment Environments
+
+Production:
+AWS EC2, Docker, Nginx, GitHub Actions, Terraform.
+
+Kubernetes Lab:
+Local Minikube cluster, Kubernetes Deployments and Services.
+
+The production website continues to run on AWS EC2.
+Kubernetes is currently implemented in the local lab environment.
